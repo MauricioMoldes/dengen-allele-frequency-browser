@@ -19,12 +19,25 @@ const Navbar = () => {
 
       
       {/* Navbar */}
-        <nav className="bg-[#003865] shadow-md py-2 px-4">
-          <div className="flex justify-center items-center">
-            {/* Centered Navigation Title */}
-            <h1 className="text-white text-lg font-semibold">
-              DenGen Allele Frequency Browser
-            </h1>
+      <nav className="bg-[#003865] shadow-md py-2 px-4">
+       <div className="flex justify-between items-center">
+         <ul className="flex space-x-6">
+            <li>
+              <a href="/" className="text-white hover:underline">
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="/about" className="text-white hover:underline">
+                About
+              </a>
+            </li>
+            <li>
+              <a href="/terms" className="text-white hover:underline">
+                Terms of Use
+              </a>
+            </li>
+          </ul>
           </div>
         </nav>
 

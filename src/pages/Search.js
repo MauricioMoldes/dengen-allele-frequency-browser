@@ -21,6 +21,10 @@ const SearchComponent = () => {
     <div className="px-32">
       <Navbar />
 
+      <div className="container mx-auto py-8">
+      <h1 className="text-4xl font-bold text-center mb-6"> Dengen Allele Frequency Browser</h1>     
+      </div>
+
       <div className="flex flex-col items-center p-6">
         {/* Search Form */}
         <form onSubmit={handleSearch} className="flex items-center space-x-2">
@@ -54,6 +58,14 @@ const SearchComponent = () => {
             </li>
           </ul>
         </div>
+      </div>
+
+      {/* Centered Statement */}
+      <div className="text-center px-6 py-8">
+        <p className="text-md">
+          The DenGen Allele Frequency Browser is a resource of variant allele frequencies and is being made publicly available.
+          The dataset encompasses SNP and indel variant calls in 2,211 individuals from whole genome sequencing of all Danish DenGen participants.  <a href="http://10.62.55.108:3000/" className="text-blue-500 underline">Learn more about DenGen</a>. 
+        </p>
       </div>
 
       <Footer />
