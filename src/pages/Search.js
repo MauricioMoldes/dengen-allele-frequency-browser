@@ -50,6 +50,9 @@ const SearchComponent = () => {
             <li>
               <Link to="#" onClick={() => setQuery("PCSK9")}>PCSK9</Link>
             </li>
+            <li> 
+              <Link to="#" onClick={() => setQuery("chr11-102904-C-G")}>chr11-102904-C-G</Link>
+            </li>
             <li>
               <Link to="#" onClick={() => setQuery("chr13-32398489-A-T")}>chr13-32398489-A-T</Link>
             </li>

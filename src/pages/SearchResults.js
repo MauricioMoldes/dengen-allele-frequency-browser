@@ -6,6 +6,8 @@ import Footer from '../components/Footer';
 import Logos from '../components/Logos';
 
 const SearchResults = () => {
+  const [loading, setLoading] = useState(true); // Set loading initially to true
+  const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   const [expandedRows, setExpandedRows] = useState({});
   const location = useLocation();
@@ -20,21 +22,57 @@ const SearchResults = () => {
   };
 
   useEffect(() => {
-    // Fetch or generate the data based on the query
     if (query) {
-      const fetchData = () => {
-        const exampleData = [
-          { AncestryGroup: "European", GeneticAncestry: "XX", Category: "Overall", AlleleCount: 637, AlleleNumber: 64034, Homozygotes: 5, AlleleFrequency: 0.009948 },
-          { AncestryGroup: "African", GeneticAncestry: "XY", Category: "Overall", AlleleCount: 637, AlleleNumber: 64034, Homozygotes: 5, AlleleFrequency: 0.009948 },
-          { AncestryGroup: "East Asian", GeneticAncestry: "XY", Category: "Overall", AlleleCount: 329, AlleleNumber: 33700, Homozygotes: 6, AlleleFrequency: 0.00993 },
-          { AncestryGroup: "European", GeneticAncestry: "XX", Category: "XX", AlleleCount: 290, AlleleNumber: 29500, Homozygotes: 2, AlleleFrequency: 0.00981 },
-          { AncestryGroup: "African", GeneticAncestry: "XY", Category: "XX", AlleleCount: 305, AlleleNumber: 30214, Homozygotes: 3, AlleleFrequency: 0.01009 },
-          { AncestryGroup: "East Asian", GeneticAncestry: "XX", Category: "XX", AlleleCount: 305, AlleleNumber: 30214, Homozygotes: 3, AlleleFrequency: 0.01009 },
-          { AncestryGroup: "European", GeneticAncestry: "XY", Category: "XY", AlleleCount: 332, AlleleNumber: 33820, Homozygotes: 4, AlleleFrequency: 0.01015 },
-          { AncestryGroup: "African", GeneticAncestry: "XX", Category: "XY", AlleleCount: 312, AlleleNumber: 32000, Homozygotes: 4, AlleleFrequency: 0.01002 },
-          { AncestryGroup: "East Asian", GeneticAncestry: "XY", Category: "XY", AlleleCount: 332, AlleleNumber: 33820, Homozygotes: 2, AlleleFrequency: 0.009817 },
-        ];
-        setData(exampleData);
+      const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+          const [chrom, pos, ref, alt] = query.split("-");
+          const apiUrl = `https://cors-anywhere.herokuapp.com/https://staging-beacon.gdi.nbis.se/api/g_variants?start=${pos}&alternateBases=${alt}&referenceBases=${ref}&referenceName=${chrom.replace("chr", "")}&assemblyId=GRCh37`;
+
+          const response = await fetch(apiUrl, {
+            mode: "cors", // Explicitly set CORS mode
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!response.ok) throw new Error("Failed to fetch data");
+          const result = await response.json();
+
+          if (result && result.response && result.response.resultSets.length > 0) {
+            const variants = result.response.resultSets[0].results || [];
+
+            const parsedData = result.response.resultSets[0].results.slice(0, 1).flatMap((variant) => {
+              const frequencyData = variant.frequencyInPopulations?.[0]?.frequencies?.[0];
+              if (frequencyData) {
+                return [
+                  {
+                    AncestryGroup: frequencyData.population || "Unknown",
+                    GeneticAncestry: frequencyData.population || "Unknown", // Assuming genetic ancestry is the same as population here
+                    Category: "Overall", // Assuming it's overall for now
+                    AlleleCount: frequencyData.alleleCount,
+                    AlleleNumber: frequencyData.alleleNumber,
+                    Homozygotes: frequencyData.alleleCountHomozygous || 0,
+                    AlleleFrequency: frequencyData.alleleFrequency?.toFixed(6) || "N/A",
+                  },
+                ];
+              }
+              return [];
+            });
+            
+            setData(parsedData);
+          } else {
+            setData([]);
+          }
+        } catch (error) {
+          console.error("Error fetching variant data:", error);
+          setError(error.message);
+          setData([]);
+        } finally {
+          setLoading(false);
+        }
       };
 
       fetchData();
@@ -56,7 +94,12 @@ const SearchResults = () => {
       <div className="container mx-auto p-4">
         <h2 className="text-2xl font-bold mb-4">Search Results for: {query}</h2>
 
-        {data.length > 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center">
+            {/* Spinning Fidget Loader */}
+            <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+          </div>
+        ) : data.length > 0 ? (
           <table className="min-w-full border-collapse border border-gray-300 mt-6">
             <thead>
               <tr className="bg-black text-white">
@@ -219,11 +262,20 @@ const SearchResults = () => {
               >
                 SweGen
               </a>
+            </li>          
+            <li>
+              <a
+                href={`https://www.omim.org/entry/${query}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                OMIM
+              </a>
             </li>
           </ul>
         </div>
       </div>
-
       <Footer />
       <Logos />
     </div>
@@ -231,6 +283,8 @@ const SearchResults = () => {
 };
 
 export default SearchResults;
+
+
 
 
 
