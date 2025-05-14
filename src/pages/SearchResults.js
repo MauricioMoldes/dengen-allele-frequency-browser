@@ -50,6 +50,10 @@ const sortedData = [...data].sort((a, b) => {
   
       try {
         if (type === "variant") {
+
+          setError(null);
+          setLoading(true);
+
           const [chrom, pos, ref, alt] = query.split("-");
           if (!chrom || !pos || !ref || !alt) {
             throw new Error("Invalid variant format. Expected chr-pos-ref-alt.");
@@ -82,6 +86,10 @@ const sortedData = [...data].sort((a, b) => {
           setData(parsedData);
   
         } else if (type === "gene") {
+
+          setError(null);
+          setLoading(true);
+
           // Step 1: Fetch gene coordinates
           const geneRes = await fetch(
             `https://rest.ensembl.org/lookup/symbol/homo_sapiens/${query}?content-type=application/json`
@@ -127,6 +135,9 @@ const sortedData = [...data].sort((a, b) => {
           setData(parsedData);
         
         } else if (type === "region") {
+
+          setError(null);
+          setLoading(true);
 
           const regionMatch = query.match(/^chr(\w+)-(\d+)-(\d+)$/);
           if (!regionMatch) throw new Error("Invalid region format. Use chr1-start-end");
@@ -178,12 +189,12 @@ const sortedData = [...data].sort((a, b) => {
         }
       } catch (error) {
         console.error("Error fetching data:", error.message);
-        setError(error.message);
-        setData([]);
+        setError(error.message); // Only shown after true failure
+        setData([]);             // Optional: clear previous data
       } finally {
-        setLoading(false);
+        setLoading(false);        // Always reset loading state
       }
-    };
+      }    
   
     fetchData();
   }, [query, type]);
