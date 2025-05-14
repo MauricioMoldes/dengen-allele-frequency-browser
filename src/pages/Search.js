@@ -8,13 +8,50 @@ const SearchComponent = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  // Mock search function (Replace with real API call)
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (query.trim()) {
-      navigate(`/search?query=${query}`); // Redirect to search results page
+  
+  // Classify query as gene, region, or variant
+  function classifyQuery(query) {
+    const cleaned = query.trim().toLowerCase();
+
+    if (/^chr[0-9xy]+-\d+-\d+$/i.test(cleaned)) {
+      return "region";
     }
-  };
+
+    if (/^chr[0-9xy]+-\d+-[acgt]+-[acgt]+$/i.test(cleaned)) {
+      return "variant";
+    }
+
+    if (/^[a-z0-9\-\.]{2,20}$/i.test(cleaned)) {
+      return "gene";
+    }
+
+    return "unknown";
+  }
+  
+
+  function handleSearch(e) {
+    e.preventDefault();
+    const type = classifyQuery(query);
+  
+    switch (type) {
+      case "gene":        
+        navigate(`/search?query=${query}&type=gene`);
+        break;
+  
+      case "region":
+        console.log(`Searching region: ${query}`);
+        navigate(`/search?query=${query}&type=region`);
+        break;
+  
+      case "variant":
+        console.log(`Searching variant: ${query}`);
+        navigate(`/search?query=${query}&type=variant`);
+        break;
+  
+      default:
+        console.warn("Unrecognized input format");
+    }
+  }
   
 
   return (
@@ -47,18 +84,22 @@ const SearchComponent = () => {
         <div className="mt-4">
           <h3 className="text-lg font-semibold">Example Searches:</h3>
           <ul className="mt-2 text-blue-500">
+            
             <li>
               <Link to="#" onClick={() => setQuery("PCSK9")}>PCSK9</Link>
             </li>
+            
             <li> 
               <Link to="#" onClick={() => setQuery("chr11-102904-C-G")}>chr11-102904-C-G</Link>
             </li>
+           {/*
             <li>
               <Link to="#" onClick={() => setQuery("chr13-32398489-A-T")}>chr13-32398489-A-T</Link>
             </li>
+             */}
             <li>
               <Link to="#" onClick={() => setQuery("chr1-55039479-55039500")}>chr1-55039479-55039500</Link>
-            </li>
+            </li>           
           </ul>
         </div>
       </div>
