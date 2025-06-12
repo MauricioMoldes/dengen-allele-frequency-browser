@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  dengen-allele-frequency-browser:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./dengen-allele-frequency-browser:/app/dengen-allele-frequency-browser  # Mount only the subfolder to avoid conflicts
+    command: yarn start
+
