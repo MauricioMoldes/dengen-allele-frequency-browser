@@ -14,7 +14,7 @@ function DataUseTermsPage() {
   <div className="bg-white p-6 rounded-lg shadow-md">
     <h2 className="text-2xl font-semibold text-[#003865] mb-4">Introduction</h2>
     <p className="text-gray-600 mb-6">
-      Welcome to the DenGen Genome Aggregation Browser. By accessing or using this platform, you agree to comply with the following terms and conditions. If you do not agree with any part of these terms, please refrain from using the platform.
+      Welcome to the DenGen Allele Frequency Browser. By accessing or using this platform, you agree to comply with the following terms and conditions. If you do not agree with any part of these terms, please refrain from using the platform.
     </p>
 
 
@@ -22,8 +22,8 @@ function DataUseTermsPage() {
  
     <h2 className="text-2xl font-semibold text-[#003865] mb-4">Purpose</h2>
     <p className="text-gray-600 mb-6">
-    The UK Biobank Allele Frequency Browser (the “Browser”) is a site operated by UK Biobank Limited. Please refer to the UK Biobank Website Terms of Use and terms below which covers the use of the UK Biobank Allele Frequency Browser (together the “AFB Terms”). By accessing and using the Browser you hereby agree to the AFB Terms.
-The Browser is a free-to-access resource of variant allele frequencies derived from summary statistics generated from research that has been conducted by the UK Biobank Whole Genome Sequencing Consortium using the UK Biobank Resource. Use of the Browser is for the biomedical research community and the purposes of conducting health-related research purposes only.
+    The DenGen Allele Frequency Browser (the “Browser”) is a site operated by the Department of Genomic Medicine, Rigshospitalet. Please refer to the <a href="http://10.62.55.108:3000/data-use-terms" className="text-blue-500 underline">DenGen Terms of Use</a>  and terms below which covers the use of the DenGen Allele Frequency Browser (together the “AFB Terms”). By accessing and using the Browser you hereby agree to the AFB Terms.
+The Browser is a free-to-access resource of variant allele frequencies derived from summary statistics generated from research that has been conducted by DenGen. Use of the Browser is for the biomedical research community and the purposes of conducting health-related research purposes only.
     </p>
 
 
@@ -31,9 +31,9 @@ The Browser is a free-to-access resource of variant allele frequencies derived f
 
     <h2 className="text-2xl font-semibold text-[#003865] mb-4">Access to Browser</h2>
     <p className="text-gray-600 mb-6">
-    Whilst UK Biobank has a reasonable belief that the use of the Browser and the summary statistics should not require any further licence or permission, the Browser and the summary statistics are provided by UK Biobank on an "As-Is" basis, and no warranties or representations, expressed or implied, are given about the performance, accuracy, completeness, currency or that results which may be obtained from the use of the Browser will be error free or reliable.
-UK Biobank makes no assurance that access to the Browser will always be available or be uninterrupted. We reserve the right to withdraw or amend the service we provide on the Browser without notice. We will not be liable, if for any reason, the Browser is unavailable at any time or for any period.
-UK Biobank hereby excludes any and all liability to any third party arising from the use of the Browser and the summary statistics.
+    Whilst DenGen has a reasonable belief that the use of the Browser and the summary statistics should not require any further licence or permission, the Browser and the summary statistics are provided by DenGen on an "As-Is" basis, and no warranties or representations, expressed or implied, are given about the performance, accuracy, completeness, currency or that results which may be obtained from the use of the Browser will be error free or reliable.
+DenGen makes no assurance that access to the Browser will always be available or be uninterrupted. We reserve the right to withdraw or amend the service we provide on the Browser without notice. We will not be liable, if for any reason, the Browser is unavailable at any time or for any period.
+DenGen hereby excludes any and all liability to any third party arising from the use of the Browser and the summary statistics.
 </p>
 
   {/* Privacy and Data Protection */}
@@ -41,14 +41,14 @@ UK Biobank hereby excludes any and all liability to any third party arising from
     <h2 className="text-2xl font-semibold text-[#003865] mb-4">Copyright notice and citations</h2>
     <p className="text-gray-600 mb-6">
     All trademarks, logos and brand names displayed on this website are the property of their respective owners and are subject to copyright and trademark laws. You must not copy or use these without the express permission of their respective owner.
-    UK Biobank requests that any published use of material obtained from the Browser in publications cite that the data has been generated by the WGS consortium under the UK Biobank Resource (project ID 52293).
+    DenGen requests that any published use of material obtained from the Browser in publications <a href="http://10.62.55.108:3000/citation" className="text-blue-500 underline">cite</a> that the data has been generated under  DenGen .
     </p>
    
 
   {/* Contact Information */} 
     <h2 className="text-2xl font-semibold text-[#003865] mb-4">Contact Information</h2>
     <p className="text-gray-600 mb-6">
-      For questions or further information, please <a href="/contact" className="text-blue-500 underline">contact us</a>.
+      For questions or further information, please <a href="http://10.62.55.108:3000/contact" className="text-blue-500 underline">contact us</a>.
     </p>
   
 </div>
