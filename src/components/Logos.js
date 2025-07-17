@@ -16,7 +16,36 @@ const Logos = () => {
         className="h-16 object-contain"
       />
 	  </a>
-	<a 
+	 <a
+  href="https://eng.ngc.dk"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hover:opacity-80 transition-opacity"
+>
+  <img
+        src="https://www.eng.ngc.dk/Media/638519742622405413/logo-2024.svg"
+        alt="Danish National Genome Center Logo"
+        className="h-16 object-contain"
+      />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 500 40"
+    className="h-10 object-contain"
+    role="img"
+    aria-label="Infrastructure by the Danish National Genome Center"
+  >
+    <text
+      x="0"
+      y="16"
+      fontFamily="Arial, sans-serif"
+      fontSize="21"
+      fill="black"
+    >
+      <tspan x="0" dy="0">Infrastructure by the Danish National Genome Center</tspan>
+    </text>
+  </svg>
+</a>
+   {/*<a 
         href="https://eng.ngc.dk" 
         target="_blank" 
         rel="noopener noreferrer"
@@ -28,6 +57,7 @@ const Logos = () => {
         className="h-16 object-contain"
       />
 	 </a>
+   */}
     </div>
   );
 }

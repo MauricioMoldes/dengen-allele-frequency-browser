@@ -16,41 +16,36 @@ function AboutPage() {
         <div className="bg-white p-6 rounded-lg shadow-md">
            <h2 className="text-2xl font-semibold text-[#003865] mb-4">Introduction</h2>
            <p className="text-gray-600 mb-6">
-        The <strong>DenGen Allele Frequency Browser</strong> is a web-based tool providing access to allele frequency data 
-          from the Danish population. This resource enables researchers and clinicians to explore genetic variant 
-          frequencies, aiding in population-based studies and clinical variant interpretation.
+       The DenGen project is a national effort to whole-genome sequence a large cohort of Danish individuals to provide a comprehensive catalog of genetic variation specific to the Danish population. This resource is invaluable for both clinical diagnostics and research across Denmark and internationally.
         </p>
 
 
-        {/* Introduction Section */}
-       
-           <h2 className="text-2xl font-semibold text-[#003865] mb-4">Key Features</h2>
-           <p className="text-gray-600 mb-6">
-        <ul>   
-          <li>Comprehensive allele frequency data from a Danish whole-genome sequencing cohort.</li>
-          <li>Intuitive user interface for variant search and exploration.</li>
-          <li>Supports single-nucleotide variants (SNVs) and structural variants (SVs).</li>
-          <li>Data presented in a format compatible with clinical and research applications.</li>
-        </ul>
+         <p className="text-gray-600 mb-6">
+        Find out more about <a href="http://10.62.55.108:3000/about" className="text-blue-500 underline">DenGen</a>.
         </p>
 
+        <p className="text-gray-600 mb-6">
+          The DenGen cohort currently includes 2,211 unrelated individuals sequenced at high coverage (average >52x) using Illumina NovaSeq6000 technology with DNA PCR-free library preparation. Structural variants (SVs) and single nucleotide variants (SNVs) have been identified using robust bioinformatics pipelines including GATK HaplotypeCaller and a consensus approach combining CNVnator, Delly, Lumpy, and Manta for CNV detection.
+           </p>
 
-         
-           <h2 className="text-2xl font-semibold text-[#003865] mb-4">Data Source and Methodology</h2>
-           <p className="text-gray-600 mb-6">
-          The data originates from whole-genome sequencing (WGS) performed on a cohort of 2,211 unrelated individuals. 
-          Variants are called using a robust bioinformatics pipeline leveraging tools like GATK’s HaplotypeCaller for SNVs 
-          and a consensus approach for structural variants. The dataset is hosted on the Danish National Genome Center 
-          (NGC) infrastructure.
-        </p>
-
+        <p className="text-gray-600 mb-6">
+         Read more about <a href="http://10.62.55.108:3000/pipelines" className="text-blue-500 underline">DenGen bioinformatics pipelines</a>.
+           </p>
         
-           <h2 className="text-2xl font-semibold text-[#003865] mb-4">Porpuse and Accessibility</h2>
            <p className="text-gray-600 mb-6">
-          The DenGen Allele Frequency Browser serves as a reference for researchers and clinicians, helping to filter 
-          common variant calls and refine genetic analyses. The aggregated variant frequencies are publicly accessible 
-          in anonymized form, ensuring broad usability while maintaining data privacy.
-        </p>
+          Allele frequencies presented in this browser represent aggregated data from the Danish population and reflect the variant distribution within Denmark. Chromosomal positions are reported according to the human genome reference assembly GRCh38 (hg38). Variant IDs follow the format: Chromosome-Hg38Position-Reference-Alternative.
+
+           </p>
+
+ <p className="text-gray-600 mb-6">
+         DenGen provides this allele frequency browser as a free resource for the scientific community for research use only. It is not intended for diagnostic or clinical decision-making purposes.
+
+           </p>
+
+<p className="text-gray-600 mb-6">
+         For questions or further information, please <a href="http://10.62.55.108:3000/contact" className="text-blue-500 underline">contact us</a>.
+           </p>
+       
       </div>  
       </div>
       <Footer />

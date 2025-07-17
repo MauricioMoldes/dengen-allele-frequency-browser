@@ -7,7 +7,8 @@ import Logos from '../components/Logos';
 
 import { Link } from "react-router-dom";
 
-
+//const endpoint=`https://cors-anywhere.herokuapp.com/https://beacon-alleles.gdi.biodata.pt/api`
+const endpoint=`http://10.62.55.108:5050/api`
 
 const SearchResults = () => {
   const [loading, setLoading] = useState(true); // Set loading initially to true
@@ -18,7 +19,10 @@ const SearchResults = () => {
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query"); // Get the query from the URL
   const type = queryParams.get("type"); // Get the type from the URL
-
+  const variantFromState = location.state?.variant;
+  const [rsID, setRsID] = useState(null);
+  
+  
   
 const [sortColumn, setSortColumn] = useState(null);
 const [sortDirection, setSortDirection] = useState("asc");
@@ -42,6 +46,13 @@ const sortedData = [...data].sort((a, b) => {
 });
 
   useEffect(() => {
+
+    if (variantFromState) {
+    setData([variantFromState]);
+    setLoading(false);
+    return;
+  }
+    
     if (!query || !type) return;
   
     const fetchData = async () => {
@@ -58,8 +69,8 @@ const sortedData = [...data].sort((a, b) => {
           if (!chrom || !pos || !ref || !alt) {
             throw new Error("Invalid variant format. Expected chr-pos-ref-alt.");
           }
-  
-          const apiUrl = `https://cors-anywhere.herokuapp.com/https://beacon-alleles.gdi.biodata.pt/api/g_variants?start=${pos}&alternateBases=${alt}&referenceBases=${ref}&referenceName=${chrom.replace("chr", "")}&assemblyId=GRCh37&limit=1000000`;
+          // To update
+          const apiUrl = `${endpoint}/g_variants?start=${pos}&alternateBases=${alt}&referenceBases=${ref}&referenceName=${chrom.replace("chr", "")}&assemblyId=GRCh38&limit=1000000`;
   
           const response = await fetch(apiUrl, {
             headers: { "Content-Type": "application/json" },
@@ -102,7 +113,7 @@ const sortedData = [...data].sort((a, b) => {
           console.log(`Gene ${query} => chr${chrom}:${start}-${end}`);
   
           // Step 2: Fetch all variants in the region
-          const regionUrl = `https://cors-anywhere.herokuapp.com/https://beacon-alleles.gdi.biodata.pt/api/g_variants?start=${start}&end=${end}&referenceName=${chrom}&assemblyId=GRCh37&limit=1000000`;
+          const regionUrl = `${endpoint}/g_variants?start=${start}&end=${end}&referenceName=${chrom}&assemblyId=GRCh38&limit=1000000`;
   
           const response = await fetch(regionUrl, {
             headers: { "Content-Type": "application/json" },
@@ -142,20 +153,18 @@ const sortedData = [...data].sort((a, b) => {
           const regionMatch = query.match(/^chr(\w+)-(\d+)-(\d+)$/);
           if (!regionMatch) throw new Error("Invalid region format. Use chr1-start-end");
 
-          console.log("regionMatch:", regionMatch);
-
           const [, chrom, start, end] = regionMatch;
 
           console.log(`Region query => chr${chrom}:${start}-${end}`);
 
         
-          const regionUrl = `https://cors-anywhere.herokuapp.com/https://beacon-alleles.gdi.biodata.pt/api/g_variants?start=${start}&end=${end}&referenceName=${chrom}&assemblyId=GRCh37&limit=1000000`;
+          const regionUrl = `${endpoint}/g_variants?start=${start}&end=${end}&referenceName=${chrom}&assemblyId=GRCh38&limit=1000000`;
 
           const response = await fetch(regionUrl, {
             headers: { "Content-Type": "application/json" },
           });
         
-          if (!response.ok) throw new Error("Failed to fetch regional variants");
+          if (!response.ok) throw new Error("Failed to fetch region variants");
         
           const result = await response.json();
           const variants = result.response?.resultSets?.[0]?.results || [];
@@ -198,6 +207,93 @@ const sortedData = [...data].sort((a, b) => {
   
     fetchData();
   }, [query, type]);
+
+
+  let ucscUrl = "";
+if (sortedData.length > 0 && sortedData[0].VariantID) {
+  const variant = sortedData[0].VariantID; // e.g. "chr1-55043548-C-T"
+  const [chrom, posStr] = variant.split("-");
+  const pos = parseInt(posStr);
+  const start = pos - 75;
+  const end = pos + 75;
+  ucscUrl = `https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&highlight=hg38.${chrom}%3A${pos}-${pos}&position=${chrom}%3A${start}-${end}`;
+}
+
+  const VariantLinks = ({ sortedData, type }) => { 
+
+  React.useEffect(() => {
+    console.log("useEffect triggered with sortedData:", sortedData);
+    console.log("🔍 useEffect triggered with type:", type);
+    if (type !== "variant") {
+      console.log("⏭ Skipping rsID fetch — not a variant page");
+      return;
+    }
+
+    if (!sortedData?.[0]?.VariantID) {
+      console.log("⚠️ No VariantID found in sortedData");
+      return;
+    }
+
+    const snv = sortedData[0].VariantID; // e.g. "chr1-55039506-C-A"
+    console.log("🧬 SNV:", snv);
+
+    const [chromosomeRaw, pos, ref, alt] = snv.split("-");
+    const chr = chromosomeRaw || null;
+
+    console.log("📌 Parsed:", { chr, pos, ref, alt });
+
+    if (!chr || !pos || !ref || !alt) {
+      console.log("❌ Missing parsed values — cannot fetch rsID");
+      return;
+    }
+
+    const variantHGVS = `${chr}:${pos}:${ref}:${alt}`;
+    const url = `https://rest.ensembl.org/variant_recoder/human/${variantHGVS}`;
+    console.log("🌐 Fetching rsID with URL:", url);
+
+    (async () => {
+      try {
+        const response = await fetch(url, { headers: { Accept: "application/json" } });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+
+        console.log("📄 Raw data:", data);
+        if (!Array.isArray(data) || data.length === 0) {
+          console.warn("⚠️ Response data is not an array or empty:", data);
+          setRsID(null);
+          return;
+        }
+
+        // Try to find rsID in nested objects
+        const firstObj = data[0];
+        console.log("First object keys:", Object.keys(firstObj));
+
+        let foundRsID = null;
+        for (const key of Object.keys(firstObj)) {
+          const subObj = firstObj[key];
+          if (subObj && Array.isArray(subObj.id)) {
+            foundRsID = subObj.id.find(id => typeof id === "string" && id.startsWith("rs"));
+            if (foundRsID) {
+              console.log(`✅ Found rsID "${foundRsID}" under key "${key}"`);
+              break;
+            }
+          }
+        }
+
+        if (!foundRsID) {
+          console.log("⚠️ No rsID found in nested keys");
+          setRsID(null);
+        } else {
+          setRsID(foundRsID);
+        }
+      } catch (error) {
+        console.error("❌ Failed to fetch rsID:", error);
+        setRsID(null);
+      }
+    })();
+  }, [type, sortedData]);
+}
+
 
   return (
     <div className="px-32">
@@ -245,14 +341,28 @@ const sortedData = [...data].sort((a, b) => {
     <tr key={index} className="bg-white">
       <td className="border border-gray-300 px-4 py-2">
         {(type === "gene" || type === "region") && item.VariantID ? (
-          <a
-            href={`/search?query=${item.VariantID}&type=variant`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
-          >
-            {item.VariantID}
-          </a>
+
+        <Link
+          to={{
+            pathname: "/search",
+            search: `?query=${item.VariantID}&type=variant`,
+          }}
+          state={{ variant: item }}
+          className="text-blue-600 hover:underline"          
+        >
+          {item.VariantID}
+        </Link>
+
+          // previous 
+
+         // <a
+         //   href={`/search?query=${item.VariantID}&type=variant`}
+         //   target="_blank"
+         //   rel="noopener noreferrer"
+         //   className="text-blue-600 hover:underline"
+         // >
+         //</td>   {item.VariantID}
+         // </a>
         ) : (
           item.VariantID || query
         )}
@@ -266,33 +376,38 @@ const sortedData = [...data].sort((a, b) => {
 </tbody>
 </table>
 
+
+
 {type === "variant" && (
-  <div className="mt-6">
-    <h3 className="text-lg font-semibold">Allele Frequency External Resources</h3>
-    <div className="flex flex-wrap gap-4">
-      {[
-        { name: "gnomAD", url: `https://gnomad.broadinstitute.org/variant/${sortedData[0].VariantID}` },
-        { name: "dbSNP", url: `https://www.ncbi.nlm.nih.gov/snp/${sortedData[0].VariantID}` },
-        { name: "UCSC Genome Browser", url: "https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&highlight=hg38.chr13%3A32398489-32398489&position=chr13%3A32398464-32398514" },
-        { name: "ClinGen Allele Registry", url: "https://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_canonicalid?canonicalid=CA26350" },
-        { name: "ClinVar", url: "https://www.ncbi.nlm.nih.gov/clinvar/variation/38266/" },
-        { name: "All of Us", url: `https://databrowser.researchallofus.org/variants/${sortedData[0].VariantID}` },
-        { name: "ukbiobank", url: `https://afb.ukbiobank.ac.uk/variant/${sortedData[0].VariantID}` },
-        { name: "FinnGen", url: `https://r12.finngen.fi/variant/${sortedData[0].VariantID}` },
-        { name: "SweGen", url: `https://swefreq.nbis.se/dataset/SweGen/browser/variant/${sortedData[0].VariantID}` },
-      ].map((resource, index) => (
-        <a
-          key={index}
-          href={resource.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
-        >
-          {resource.name}
-        </a>
-      ))}
+  <>
+    <VariantLinks sortedData={sortedData} type={type} />
+    <div className="mt-6">
+      <h3 className="text-lg font-semibold">Allele Frequency External Resources</h3>
+      <div className="flex flex-wrap gap-4">
+        {[
+          { name: "gnomAD", url: `https://gnomad.broadinstitute.org/variant/${sortedData[0].VariantID}` },
+          { name: "dbSNP", url: rsID ? `https://www.ncbi.nlm.nih.gov/snp/${rsID}` : "#" },
+          { name: "UCSC Genome Browser", url: ucscUrl },
+          { name: "ClinGen Allele Registry", url: "https://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_canonicalid?canonicalid=CA26350" },
+          { name: "ClinVar", url: "https://www.ncbi.nlm.nih.gov/clinvar/variation/38266/" },
+          { name: "All of Us", url: `https://databrowser.researchallofus.org/snvsindels/${sortedData[0].VariantID}` },
+          { name: "ukbiobank", url: `https://afb.ukbiobank.ac.uk/variant/${sortedData[0].VariantID}` },
+          { name: "FinnGen", url: `https://r12.finngen.fi/variant/${sortedData[0].VariantID}` },
+          { name: "SweGen", url: `https://swefreq.nbis.se/dataset/SweGen/browser/variant/${sortedData[0].VariantID}` },
+        ].map((resource, index) => (
+          <a
+            key={index}
+            href={resource.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            {resource.name}
+          </a>
+        ))}
+      </div>
     </div>
-  </div>
+  </>
 )}
   </>
 ) : (
