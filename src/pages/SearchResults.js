@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 
 //const endpoint=`https://cors-anywhere.herokuapp.com/https://beacon-alleles.gdi.biodata.pt/api`
 const endpoint=`http://10.62.55.108:5050/api`
+//const endpoint=`http://localhost:5050/api`
 
 const SearchResults = () => {
   const [loading, setLoading] = useState(true); // Set loading initially to true
