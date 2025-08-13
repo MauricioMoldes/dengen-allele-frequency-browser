@@ -1,0 +1,10 @@
+const config = {
+  BEACON_API: process.env.REACT_APP_REACT_APP_BEACON_API,
+  DENGEN_LANDING_PAGE: process.env.REACT_APP_DENGEN_LANDING_PAGE,
+  DENGEN_ABOUT: process.env.REACT_APP_DENGEN_ABOUT,
+  DENGEN_PIPELINES: process.env.REACT_APP_DENGEN_PIPELINES,
+  DENGEN_CONTACT: process.env.REACT_APP_DENGEN_CONTACT
+  // Add more here if needed
+};
+
+export default config;

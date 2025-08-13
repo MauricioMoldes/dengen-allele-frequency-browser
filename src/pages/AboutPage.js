@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Logos from '../components/Logos';
+import config from '../config';
 
 function AboutPage() {
   return (
@@ -21,7 +22,7 @@ function AboutPage() {
 
 
          <p className="text-gray-600 mb-6">
-        Find out more about <a href="http://10.62.55.108:3000/about" className="text-blue-500 underline">DenGen</a>.
+        Find out more about <a href={config.DENGEN_ABOUT} className="text-blue-500 underline">DenGen</a>.
         </p>
 
         <p className="text-gray-600 mb-6">
@@ -29,7 +30,7 @@ function AboutPage() {
            </p>
 
         <p className="text-gray-600 mb-6">
-         Read more about <a href="http://10.62.55.108:3000/pipelines" className="text-blue-500 underline">DenGen bioinformatics pipelines</a>.
+         Read more about <a href={config.DENGEN_PIPELINES} className="text-blue-500 underline">DenGen bioinformatics pipelines</a>.
            </p>
         
            <p className="text-gray-600 mb-6">
@@ -43,7 +44,7 @@ function AboutPage() {
            </p>
 
 <p className="text-gray-600 mb-6">
-         For questions or further information, please <a href="http://10.62.55.108:3000/contact" className="text-blue-500 underline">contact us</a>.
+         For questions or further information, please <a href={config.DENGEN_CONTACT} className="text-blue-500 underline">contact us</a>.
            </p>
        
       </div>  

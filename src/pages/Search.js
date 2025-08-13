@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Logos from '../components/Logos';
 import { useNavigate } from "react-router-dom";
+import config from '../config';
 const SearchComponent = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
@@ -108,7 +109,7 @@ const SearchComponent = () => {
       <div className="text-center px-6 py-8">
         <p className="text-md">
           The DenGen Allele Frequency Browser is a resource of variant allele frequencies and is being made publicly available.
-          The dataset encompasses SNP and indel variant calls in 2,211 individuals from whole genome sequencing of all Danish DenGen participants.  <a href="http://10.62.55.108:3000/" className="text-blue-500 underline">Learn more about DenGen</a>. 
+          The dataset encompasses SNP and indel variant calls in 2,211 individuals from whole genome sequencing of all Danish DenGen participants.  <a href={config.DENGEN_LANDING_PAGE} className="text-blue-500 underline">Learn more about DenGen</a>. 
         </p>
       </div>
 
