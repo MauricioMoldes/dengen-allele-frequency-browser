@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Logos from '../components/Logos';
+import config from '../config';
 
 function DataUseTermsPage() {
   return (
@@ -22,7 +23,7 @@ function DataUseTermsPage() {
  
     <h2 className="text-2xl font-semibold text-[#003865] mb-4">Purpose</h2>
     <p className="text-gray-600 mb-6">
-    The DenGen Allele Frequency Browser (the “Browser”) is a site operated by the Department of Genomic Medicine, Rigshospitalet. Please refer to the <a href="http://10.62.55.108:3000/data-use-terms" className="text-blue-500 underline">DenGen Terms of Use</a>  and terms below which covers the use of the DenGen Allele Frequency Browser (together the “AFB Terms”). By accessing and using the Browser you hereby agree to the AFB Terms.
+    The DenGen Allele Frequency Browser (the “Browser”) is a site operated by the Department of Genomic Medicine, Rigshospitalet. Please refer to the <a href={config.DENGEN_TERMS} className="text-blue-500 underline">DenGen Terms of Use</a>  and terms below which covers the use of the DenGen Allele Frequency Browser (together the “AFB Terms”). By accessing and using the Browser you hereby agree to the AFB Terms.
 The Browser is a free-to-access resource of variant allele frequencies derived from summary statistics generated from research that has been conducted by DenGen. Use of the Browser is for the biomedical research community and the purposes of conducting health-related research purposes only.
     </p>
 
@@ -41,14 +42,14 @@ DenGen hereby excludes any and all liability to any third party arising from the
     <h2 className="text-2xl font-semibold text-[#003865] mb-4">Copyright notice and citations</h2>
     <p className="text-gray-600 mb-6">
     All trademarks, logos and brand names displayed on this website are the property of their respective owners and are subject to copyright and trademark laws. You must not copy or use these without the express permission of their respective owner.
-    DenGen requests that any published use of material obtained from the Browser in publications <a href="http://10.62.55.108:3000/citation" className="text-blue-500 underline">cite</a> that the data has been generated under  DenGen .
+    DenGen requests that any published use of material obtained from the Browser in publications <a href={config.DENGEN_CITE} className="text-blue-500 underline">cite</a> that the data has been generated under  DenGen .
     </p>
    
 
   {/* Contact Information */} 
     <h2 className="text-2xl font-semibold text-[#003865] mb-4">Contact Information</h2>
     <p className="text-gray-600 mb-6">
-      For questions or further information, please <a href="http://10.62.55.108:3000/contact" className="text-blue-500 underline">contact us</a>.
+      For questions or further information, please <a href={config.DENGEN_CONTACT} className="text-blue-500 underline">contact us</a>.
     </p>
   
 </div>
