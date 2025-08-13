@@ -6,10 +6,11 @@ import Footer from '../components/Footer';
 import Logos from '../components/Logos';
 
 import { Link } from "react-router-dom";
+import config from '../config';
 
-//const endpoint=`https://cors-anywhere.herokuapp.com/https://beacon-alleles.gdi.biodata.pt/api`
-const endpoint=`http://10.62.55.108:5050/api`
-//const endpoint=`http://localhost:5050/api`
+//const endpoint=`http://10.62.55.108:5050/api`
+const endpoint=config.BEACON_API
+
 
 const SearchResults = () => {
   const [loading, setLoading] = useState(true); // Set loading initially to true
