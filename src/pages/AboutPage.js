@@ -17,7 +17,7 @@ function AboutPage() {
         <div className="bg-white p-6 rounded-lg shadow-md">
            <h2 className="text-2xl font-semibold text-[#003865] mb-4">Introduction</h2>
            <p className="text-gray-600 mb-6">
-       The DenGen project is a national effort to whole-genome sequence a large cohort of Danish individuals to provide a comprehensive catalog of genetic variation specific to the Danish population. This resource is invaluable for both clinical diagnostics and research across Denmark and internationally.
+       The DenGen project is an effort to whole-genome sequence a large cohort of Danish individuals to provide a comprehensive catalog of genetic variation specific to the Danish population. This resource is invaluable for both clinical diagnostics and research across Denmark and internationally.
         </p>
 
 
